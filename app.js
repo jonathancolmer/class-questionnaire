@@ -40,7 +40,7 @@ const els = Object.fromEntries([
   "questionnaireForm", "firstName", "lastName", "email", "preferredName", "hometown", "sectionChoices",
   "courseChoices", "majorMinor", "learningChoices", "learningCount", "otherLearningField", "otherLearning", "careerGoals", "careerCount", "uniqueFact",
   "factCount", "formError", "submitButton", "thanksName", "editResponseButton", "dashboardLoginForm", "dashboardEmail",
-  "dashboardPassword", "passwordSignInButton", "resetPasswordButton", "signInButton", "authError",
+  "dashboardPassword", "passwordSignInButton", "resetPasswordButton", "authError",
   "copyLinkButton", "downloadButton", "signOutButton", "totalResponses", "responseUpdate", "sectionsRepresented",
   "sectionSummary", "topYear", "topYearCount", "topLearning", "topLearningCount", "yearChart", "learningChart",
   "courseChart", "majorCloud", "studentSearch", "sectionFilter", "directoryEmpty", "studentDirectory",
@@ -149,7 +149,6 @@ function bindEvents() {
   els.learningChoices.addEventListener("change", enforceLearningLimit);
   els.dashboardLoginForm.addEventListener("submit", signInWithPassword);
   els.resetPasswordButton.addEventListener("click", resetDashboardPassword);
-  els.signInButton.addEventListener("click", signIn);
   els.signOutButton.addEventListener("click", signOut);
   els.copyLinkButton.addEventListener("click", copyQuestionnaireLink);
   els.downloadButton.addEventListener("click", downloadCsv);
@@ -355,7 +354,6 @@ function initDashboardAuth() {
 
 function setAuthBusy(busy) {
   els.passwordSignInButton.disabled = busy;
-  els.signInButton.disabled = busy;
   els.resetPasswordButton.disabled = busy;
   els.passwordSignInButton.textContent = busy ? "Checking…" : "Unlock dashboard";
 }
@@ -363,6 +361,27 @@ function setAuthBusy(busy) {
 function showAuthError(message) {
   els.authError.textContent = message;
   els.authError.hidden = false;
+}
+
+function passwordSignInError(error) {
+  switch (error.code) {
+    case "auth/operation-not-allowed":
+      return "Email/password sign-in is not enabled. Enable it in Firebase Authentication → Sign-in method.";
+    case "auth/invalid-email":
+      return "That email address is not valid.";
+    case "auth/user-disabled":
+      return "This account has been disabled in Firebase Authentication.";
+    case "auth/too-many-requests":
+      return "Firebase temporarily blocked sign-in after too many attempts. Wait a few minutes or reset the password.";
+    case "auth/network-request-failed":
+      return "Firebase could not be reached. Check the connection and try again.";
+    case "auth/invalid-credential":
+    case "auth/user-not-found":
+    case "auth/wrong-password":
+      return "The email or password is incorrect. Confirm that this email appears under Firebase Authentication → Users, or reset its password.";
+    default:
+      return `Sign-in failed (${error.code || "unknown error"}). Check the Firebase Authentication user and try again.`;
+  }
 }
 
 async function signInWithPassword(event) {
@@ -379,9 +398,7 @@ async function signInWithPassword(event) {
     await authApi.signInWithEmailAndPassword(auth, email, password);
   } catch (error) {
     console.error(error);
-    showAuthError(error.code === "auth/operation-not-allowed"
-      ? "Email and password sign-in is not enabled for this Firebase project yet."
-      : "That email and password were not recognized, or the account is not available.");
+    showAuthError(passwordSignInError(error));
   } finally {
     setAuthBusy(false);
   }
@@ -401,24 +418,6 @@ async function resetDashboardPassword() {
   } catch (error) {
     console.error(error);
     showToast("If that approved account exists, a password-reset email has been sent.", 5200);
-  } finally {
-    setAuthBusy(false);
-  }
-}
-
-async function signIn() {
-  setAuthBusy(true);
-  els.authError.hidden = true;
-  try {
-    const provider = new authApi.GoogleAuthProvider();
-    provider.setCustomParameters({ prompt: "select_account" });
-    await authApi.signInWithPopup(auth, provider);
-  } catch (error) {
-    console.error(error);
-    els.authError.textContent = error.code === "auth/operation-not-allowed"
-      ? "Google sign-in is not enabled for this Firebase project yet. See the README setup steps."
-      : "Sign-in did not finish. Try again or ask the course administrator to authorize your account.";
-    els.authError.hidden = false;
   } finally {
     setAuthBusy(false);
   }
@@ -819,7 +818,6 @@ async function start() {
     if (DASHBOARD_MODE) {
       els.authError.textContent = "The dashboard could not connect. Check your internet connection and refresh.";
       els.authError.hidden = false;
-      els.signInButton.disabled = true;
       els.passwordSignInButton.disabled = true;
       els.resetPasswordButton.disabled = true;
     } else {

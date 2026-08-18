@@ -164,10 +164,6 @@ input:focus, select:focus, textarea:focus { border-color: var(--orange); box-sha
 .password-row { min-height: 34px; display: flex; justify-content: flex-end; align-items: center; }
 .text-button { padding: 5px 0; color: var(--blue); background: transparent; border: 0; cursor: pointer; font-size: 11px; font-weight: 750; }
 .text-button:hover { color: var(--navy); text-decoration: underline; }
-.auth-divider { margin: 20px 0; display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
-.auth-divider::before, .auth-divider::after { content: ""; height: 1px; flex: 1; background: var(--line); }
-.google-button { width: 100%; }
-.google-button span { width: 23px; height: 23px; margin-right: 7px; display: inline-grid; place-items: center; color: var(--blue); background: white; border: 1px solid var(--line); border-radius: 50%; font-family: Georgia, serif; }
 .auth-card .auth-note { margin: 17px 0 0; color: var(--muted); font-size: 10px; line-height: 1.45; }
 
 .dashboard-shell { width: min(calc(100% - 48px), 1540px); margin: 0 auto; padding: 46px 0 90px; }
