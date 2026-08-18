@@ -58,7 +58,12 @@ Suggested rules:
         ".read": "auth != null && root.child('courseQuestionnaire2026/authorizedUsers').child(auth.uid).val() === true",
         "$response": {
           ".write": "auth != null && $response === auth.uid && newData.exists()",
-          ".validate": "newData.hasChildren(['firstName','lastName','email','hometown','section','year','learning','majorMinor']) && newData.child('firstName').isString() && newData.child('firstName').val().length <= 60 && newData.child('lastName').isString() && newData.child('lastName').val().length <= 60 && newData.child('email').isString() && newData.child('email').val().length <= 120 && newData.child('hometown').isString() && newData.child('hometown').val().length <= 100 && newData.child('majorMinor').isString() && newData.child('majorMinor').val().length <= 240 && newData.child('learning').hasChildren() && newData.child('learning').numChildren() <= 2 && (!newData.child('otherLearning').exists() || (newData.child('otherLearning').isString() && newData.child('otherLearning').val().length <= 180))"
+          ".validate": "newData.hasChildren(['firstName','lastName','email','hometown','section','year','learning','majorMinor']) && newData.child('firstName').isString() && newData.child('firstName').val().length <= 60 && newData.child('lastName').isString() && newData.child('lastName').val().length <= 60 && newData.child('email').isString() && newData.child('email').val().length <= 120 && newData.child('hometown').isString() && newData.child('hometown').val().length <= 100 && newData.child('majorMinor').isString() && newData.child('majorMinor').val().length <= 240 && newData.child('learning').hasChildren() && (!newData.child('otherLearning').exists() || (newData.child('otherLearning').isString() && newData.child('otherLearning').val().length <= 180))",
+          "learning": {
+            "$choice": {
+              ".validate": "($choice === '0' || $choice === '1') && newData.isString() && newData.val().length <= 120"
+            }
+          }
         }
       }
     }
