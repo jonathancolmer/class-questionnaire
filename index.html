@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#232d4b">
   <meta name="description" content="Student questionnaire for Economics of Sustainability and the Environment.">
   <title>Course Questionnaire</title>
-  <link rel="stylesheet" href="styles.css?v=20260818-5">
+  <link rel="stylesheet" href="styles.css?v=20260818-6">
 </head>
 <body>
   <header class="site-header">
@@ -152,9 +152,22 @@
     <section id="authView" class="centered-view auth-view" hidden>
       <div class="auth-card">
         <div class="eyebrow">Teaching team</div>
-        <h1>Class portrait</h1>
-        <p>Sign in with an authorized account to view identifiable student responses.</p>
-        <button id="signInButton" class="button button-primary button-large" type="button">Sign in with Google</button>
+        <div class="auth-lock" aria-hidden="true"><span></span></div>
+        <h1>Private dashboard</h1>
+        <p>Sign in with an approved teaching-team account to view identifiable student responses.</p>
+        <form id="dashboardLoginForm" class="auth-form" novalidate>
+          <label for="dashboardEmail">Email address</label>
+          <input id="dashboardEmail" name="dashboardEmail" type="email" autocomplete="username" inputmode="email" required>
+          <label for="dashboardPassword">Password</label>
+          <input id="dashboardPassword" name="dashboardPassword" type="password" autocomplete="current-password" required>
+          <div class="password-row">
+            <button id="resetPasswordButton" class="text-button" type="button">Forgot password?</button>
+          </div>
+          <button id="passwordSignInButton" class="button button-primary button-large" type="submit">Unlock dashboard</button>
+        </form>
+        <div class="auth-divider"><span>or</span></div>
+        <button id="signInButton" class="button button-secondary button-large google-button" type="button"><span aria-hidden="true">G</span> Continue with Google</button>
+        <p class="auth-note">Authentication alone does not grant access. The account must also be on the course’s approved-user list.</p>
         <p id="authError" class="form-error" role="alert" hidden></p>
       </div>
     </section>
@@ -230,6 +243,6 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
   <script src="firebase-config.js"></script>
-  <script type="module" src="app.js?v=20260818-4"></script>
+  <script type="module" src="app.js?v=20260818-5"></script>
 </body>
 </html>

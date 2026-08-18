@@ -39,7 +39,8 @@ const els = Object.fromEntries([
   "loadingView", "studentView", "thanksView", "authView", "dashboardView", "viewBadge", "connectionStatus",
   "questionnaireForm", "firstName", "lastName", "email", "preferredName", "hometown", "sectionChoices",
   "courseChoices", "majorMinor", "learningChoices", "learningCount", "otherLearningField", "otherLearning", "careerGoals", "careerCount", "uniqueFact",
-  "factCount", "formError", "submitButton", "thanksName", "editResponseButton", "signInButton", "authError",
+  "factCount", "formError", "submitButton", "thanksName", "editResponseButton", "dashboardLoginForm", "dashboardEmail",
+  "dashboardPassword", "passwordSignInButton", "resetPasswordButton", "signInButton", "authError",
   "copyLinkButton", "downloadButton", "signOutButton", "totalResponses", "responseUpdate", "sectionsRepresented",
   "sectionSummary", "topYear", "topYearCount", "topLearning", "topLearningCount", "yearChart", "learningChart",
   "courseChart", "majorCloud", "studentSearch", "sectionFilter", "directoryEmpty", "studentDirectory",
@@ -146,6 +147,8 @@ function bindEvents() {
   els.careerGoals.addEventListener("input", () => { els.careerCount.textContent = els.careerGoals.value.length; });
   els.uniqueFact.addEventListener("input", () => { els.factCount.textContent = els.uniqueFact.value.length; });
   els.learningChoices.addEventListener("change", enforceLearningLimit);
+  els.dashboardLoginForm.addEventListener("submit", signInWithPassword);
+  els.resetPasswordButton.addEventListener("click", resetDashboardPassword);
   els.signInButton.addEventListener("click", signIn);
   els.signOutButton.addEventListener("click", signOut);
   els.copyLinkButton.addEventListener("click", copyQuestionnaireLink);
@@ -344,13 +347,67 @@ function initDashboardAuth() {
       showOnly("authView");
       return;
     }
+    els.dashboardPassword.value = "";
     showOnly("dashboardView");
     subscribeResponses();
   });
 }
 
+function setAuthBusy(busy) {
+  els.passwordSignInButton.disabled = busy;
+  els.signInButton.disabled = busy;
+  els.resetPasswordButton.disabled = busy;
+  els.passwordSignInButton.textContent = busy ? "Checking…" : "Unlock dashboard";
+}
+
+function showAuthError(message) {
+  els.authError.textContent = message;
+  els.authError.hidden = false;
+}
+
+async function signInWithPassword(event) {
+  event.preventDefault();
+  const email = cleanText(els.dashboardEmail.value).toLowerCase();
+  const password = els.dashboardPassword.value;
+  els.authError.hidden = true;
+  if (!email || !els.dashboardEmail.validity.valid || !password) {
+    showAuthError("Enter the email address and password for your approved teaching-team account.");
+    return;
+  }
+  setAuthBusy(true);
+  try {
+    await authApi.signInWithEmailAndPassword(auth, email, password);
+  } catch (error) {
+    console.error(error);
+    showAuthError(error.code === "auth/operation-not-allowed"
+      ? "Email and password sign-in is not enabled for this Firebase project yet."
+      : "That email and password were not recognized, or the account is not available.");
+  } finally {
+    setAuthBusy(false);
+  }
+}
+
+async function resetDashboardPassword() {
+  const email = cleanText(els.dashboardEmail.value).toLowerCase();
+  els.authError.hidden = true;
+  if (!email || !els.dashboardEmail.validity.valid) {
+    showAuthError("Enter your account email above, then select “Forgot password?” again.");
+    return;
+  }
+  setAuthBusy(true);
+  try {
+    await authApi.sendPasswordResetEmail(auth, email);
+    showToast("If that approved account exists, a password-reset email has been sent.", 5200);
+  } catch (error) {
+    console.error(error);
+    showToast("If that approved account exists, a password-reset email has been sent.", 5200);
+  } finally {
+    setAuthBusy(false);
+  }
+}
+
 async function signIn() {
-  els.signInButton.disabled = true;
+  setAuthBusy(true);
   els.authError.hidden = true;
   try {
     const provider = new authApi.GoogleAuthProvider();
@@ -363,7 +420,7 @@ async function signIn() {
       : "Sign-in did not finish. Try again or ask the course administrator to authorize your account.";
     els.authError.hidden = false;
   } finally {
-    els.signInButton.disabled = false;
+    setAuthBusy(false);
   }
 }
 
@@ -384,7 +441,7 @@ function subscribeResponses() {
       console.error(error);
       setConnection("offline", "Access denied");
       showOnly("authView");
-      els.authError.textContent = "This Google account is signed in, but it is not on the questionnaire’s authorized teaching-team list. Choose another account or ask the course administrator to add it.";
+      els.authError.textContent = "This account is valid, but it is not on the questionnaire’s approved teaching-team list. Sign in with another account or ask the course administrator to approve it.";
       els.authError.hidden = false;
     }
   );
@@ -759,6 +816,8 @@ async function start() {
       els.authError.textContent = "The dashboard could not connect. Check your internet connection and refresh.";
       els.authError.hidden = false;
       els.signInButton.disabled = true;
+      els.passwordSignInButton.disabled = true;
+      els.resetPasswordButton.disabled = true;
     } else {
       els.formError.textContent = "The questionnaire is offline. Check your internet connection before submitting.";
       els.formError.hidden = false;

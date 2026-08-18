@@ -37,9 +37,10 @@ Each browser gets an anonymous Firebase identity. A student can revise their ans
 
 Unlike the anonymous first-day pulse, this app collects names and email addresses. The dashboard therefore uses Firebase Authentication and should **not** be deployed with public database reads.
 
-1. In the Firebase console, enable **Authentication → Sign-in method → Google** for the teaching team and **Anonymous** for student submissions.
-2. Add every approved teaching-team account's Firebase UID below `courseQuestionnaire2026/authorizedUsers/` with the value `true`.
-3. Merge the rules below into the project's existing Realtime Database rules. Do not replace rules belonging to other course apps.
+1. In the Firebase console, enable **Authentication → Sign-in method → Email/Password** and **Google** for the teaching team, and **Anonymous** for student submissions.
+2. Create each password-based teaching-team account under **Authentication → Users**, or have the person sign in once with Google.
+3. Add every approved teaching-team account's Firebase UID below `courseQuestionnaire2026/authorizedUsers/` with the value `true`.
+4. Merge the rules below into the project's existing Realtime Database rules. Do not replace rules belonging to other course apps.
 
 The project must not have a broader parent-level rule such as `".read": true`; Firebase grants access when any applicable rule grants it, so a public rule above this namespace would defeat the dashboard restriction.
 
