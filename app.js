@@ -809,6 +809,10 @@ async function start() {
     return;
   }
 
+  if (DASHBOARD_MODE) {
+    showOnly("authView");
+    setAuthBusy(true);
+  }
   const connected = await initFirebase({ includeAuth: true });
   if (!connected) {
     showOnly(DASHBOARD_MODE ? "authView" : "studentView");
@@ -824,7 +828,10 @@ async function start() {
     }
     return;
   }
-  if (DASHBOARD_MODE) initDashboardAuth();
+  if (DASHBOARD_MODE) {
+    setAuthBusy(false);
+    initDashboardAuth();
+  }
   else initStudentAuth();
 }
 
