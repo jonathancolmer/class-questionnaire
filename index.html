@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#232d4b">
+  <meta name="description" content="Student questionnaire for Economics of Sustainability and the Environment.">
+  <title>Course Questionnaire</title>
+  <link rel="stylesheet" href="styles.css?v=20260818-5">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="./" aria-label="Course questionnaire home">
+      <span class="brand-mark" aria-hidden="true">E</span>
+      <span class="brand-copy">
+        <strong>Economics of Sustainability and the Environment</strong>
+        <small>Student Questionnaire</small>
+      </span>
+    </a>
+    <div class="header-meta">
+      <span id="viewBadge" class="view-badge" hidden>Teaching team</span>
+      <span id="connectionStatus" class="connection-status" aria-live="polite">
+        <span class="status-dot"></span><span>Connecting</span>
+      </span>
+    </div>
+  </header>
+
+  <main>
+    <section id="loadingView" class="centered-view">
+      <div class="loader" aria-hidden="true"></div>
+      <h1>Opening the questionnaire…</h1>
+      <p>One moment while we connect securely.</p>
+    </section>
+
+    <section id="studentView" class="student-shell" hidden>
+      <div class="student-intro">
+        <div>
+          <div class="eyebrow">Before we begin</div>
+          <h1>Help us teach the people in the room.</h1>
+        </div>
+        <p>This short questionnaire helps the teaching team understand your background, how you learn, and what you hope to do next.</p>
+      </div>
+
+      <form id="questionnaireForm" class="questionnaire" novalidate>
+        <fieldset class="form-section">
+          <legend><span class="section-number">01</span><span>About you</span></legend>
+          <div class="field-grid two-column">
+            <div class="field">
+              <label for="firstName">First name <span aria-hidden="true">*</span></label>
+              <input id="firstName" name="firstName" type="text" maxlength="60" autocomplete="given-name" required>
+            </div>
+            <div class="field">
+              <label for="lastName">Last name <span aria-hidden="true">*</span></label>
+              <input id="lastName" name="lastName" type="text" maxlength="60" autocomplete="family-name" required>
+            </div>
+            <div class="field field-wide">
+              <label for="email">Email address <span aria-hidden="true">*</span></label>
+              <input id="email" name="email" type="email" maxlength="120" autocomplete="email" inputmode="email" placeholder="you@virginia.edu" required>
+              <p class="field-help">Please use the address you check for course communication.</p>
+            </div>
+            <div class="field">
+              <label for="preferredName">What do you prefer to be called?</label>
+              <input id="preferredName" name="preferredName" type="text" maxlength="60" autocomplete="nickname" placeholder="If different from your first name">
+            </div>
+            <div class="field">
+              <label for="hometown">Where is your hometown? <span aria-hidden="true">*</span></label>
+              <input id="hometown" name="hometown" type="text" maxlength="100" autocomplete="address-level2" placeholder="City, state or country" required>
+            </div>
+          </div>
+
+          <div class="question-block">
+            <div class="question-label">Discussion section <span aria-hidden="true">*</span></div>
+            <p class="field-help">Choose the section in which you are enrolled.</p>
+            <div id="sectionChoices" class="choice-grid section-choices" role="radiogroup" aria-label="Discussion section"></div>
+          </div>
+        </fieldset>
+
+        <fieldset class="form-section">
+          <legend><span class="section-number">02</span><span>Your academic path</span></legend>
+          <div class="question-block">
+            <div class="question-label">Year in school <span aria-hidden="true">*</span></div>
+            <div class="choice-grid year-choices" role="radiogroup" aria-label="Year in school">
+              <label><input type="radio" name="year" value="1" required><span><b>1</b>First year</span></label>
+              <label><input type="radio" name="year" value="2"><span><b>2</b>Second year</span></label>
+              <label><input type="radio" name="year" value="3"><span><b>3</b>Third year</span></label>
+              <label><input type="radio" name="year" value="4"><span><b>4</b>Fourth year</span></label>
+            </div>
+          </div>
+
+          <div class="question-block">
+            <div class="question-label">Which of these classes have you taken?</div>
+            <p class="field-help">Select all that apply. It is completely fine to select none.</p>
+            <div id="courseChoices" class="choice-grid course-choices"></div>
+          </div>
+
+          <div class="field">
+            <label for="majorMinor">What major or minor are you considering? <span aria-hidden="true">*</span></label>
+            <textarea id="majorMinor" name="majorMinor" rows="3" maxlength="240" placeholder="Undecided is a perfectly good answer." required></textarea>
+          </div>
+        </fieldset>
+
+        <fieldset class="form-section">
+          <legend><span class="section-number">03</span><span>How you learn</span></legend>
+          <div class="question-block">
+            <div class="question-label">Which of the following best helps you learn and understand new material? <span aria-hidden="true">*</span></div>
+            <div class="choice-instruction">
+              <p class="field-help">Select up to 2.</p>
+              <span id="learningCount" class="selection-count" aria-live="polite">0 of 2 selected</span>
+            </div>
+            <div id="learningChoices" class="learning-choices"></div>
+            <div id="otherLearningField" class="field other-learning-field" hidden>
+              <label for="otherLearning">Other learning approach <span aria-hidden="true">*</span></label>
+              <input id="otherLearning" name="otherLearning" type="text" maxlength="180" placeholder="Tell us what works best for you">
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="form-section last-section">
+          <legend><span class="section-number">04</span><span>Looking forward</span></legend>
+          <div class="field">
+            <label for="careerGoals">What are your future career goals or plans, if any?</label>
+            <textarea id="careerGoals" name="careerGoals" rows="4" maxlength="600" placeholder="A direction, an idea, or ‘not sure yet’ are all welcome."></textarea>
+            <div class="character-count"><span id="careerCount">0</span>/600</div>
+          </div>
+          <div class="field">
+            <label for="uniqueFact">Share a fact that makes you unlike anyone we are likely to have met.</label>
+            <p class="field-help">Optional. Serious, surprising, or delightfully ordinary all work.</p>
+            <textarea id="uniqueFact" name="uniqueFact" rows="4" maxlength="600"></textarea>
+            <div class="character-count"><span id="factCount">0</span>/600</div>
+          </div>
+        </fieldset>
+
+        <div id="formError" class="form-error" role="alert" hidden></div>
+        <div class="submit-row">
+          <div>
+            <p class="privacy-note"><strong>Shared only with the teaching team.</strong> Your answers are used to support this course.</p>
+            <p class="required-note">* Required</p>
+          </div>
+          <button id="submitButton" class="button button-primary button-large" type="submit">Send my questionnaire</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="thanksView" class="centered-view success-view" hidden>
+      <div class="success-mark" aria-hidden="true">✓</div>
+      <div class="eyebrow">Received</div>
+      <h1>Thank you, <span id="thanksName">there</span>.</h1>
+      <p>Your questionnaire is with the teaching team. You can return on this device to make changes.</p>
+      <button id="editResponseButton" class="button button-secondary" type="button">Edit my answers</button>
+    </section>
+
+    <section id="authView" class="centered-view auth-view" hidden>
+      <div class="auth-card">
+        <div class="eyebrow">Teaching team</div>
+        <h1>Class portrait</h1>
+        <p>Sign in with an authorized account to view identifiable student responses.</p>
+        <button id="signInButton" class="button button-primary button-large" type="button">Sign in with Google</button>
+        <p id="authError" class="form-error" role="alert" hidden></p>
+      </div>
+    </section>
+
+    <section id="dashboardView" class="dashboard-shell" hidden>
+      <div class="dashboard-heading">
+        <div>
+          <div class="eyebrow">Teaching team dashboard</div>
+          <h1>Know your class.</h1>
+          <p id="dashboardSubtitle">A live view of backgrounds, preferences, and individual responses.</p>
+        </div>
+        <div class="dashboard-actions">
+          <button id="copyLinkButton" class="button button-secondary" type="button">Copy questionnaire link</button>
+          <button id="downloadButton" class="button button-secondary" type="button">Download CSV</button>
+          <button id="signOutButton" class="button button-quiet" type="button">Sign out</button>
+        </div>
+      </div>
+
+      <div class="metric-grid" aria-label="Class summary">
+        <article class="metric-card primary-metric"><span>Responses</span><strong id="totalResponses">0</strong><small id="responseUpdate">Waiting for students</small></article>
+        <article class="metric-card"><span>Sections represented</span><strong id="sectionsRepresented">0</strong><small id="sectionSummary">of 0 sections</small></article>
+        <article class="metric-card"><span>Most common year</span><strong id="topYear">—</strong><small id="topYearCount">No responses yet</small></article>
+        <article class="metric-card"><span>Most requested mode</span><strong id="topLearning">—</strong><small id="topLearningCount">No responses yet</small></article>
+      </div>
+
+      <section class="aggregate-grid" aria-label="Aggregate questionnaire results">
+        <article class="panel year-panel">
+          <div class="panel-heading"><div><span class="panel-index">01</span><h2>Year in school</h2></div></div>
+          <div id="yearChart" class="horizontal-chart"></div>
+        </article>
+        <article class="panel learning-panel">
+          <div class="panel-heading"><div><span class="panel-index">02</span><h2>How students learn</h2></div><span class="panel-note">Up to 2 each</span></div>
+          <div id="learningChart" class="horizontal-chart"></div>
+        </article>
+        <article class="panel courses-panel">
+          <div class="panel-heading"><div><span class="panel-index">03</span><h2>Prior coursework</h2></div></div>
+          <div id="courseChart" class="horizontal-chart two-column-chart"></div>
+        </article>
+        <article class="panel majors-panel">
+          <div class="panel-heading"><div><span class="panel-index">04</span><h2>Academic interests</h2></div></div>
+          <div id="majorCloud" class="tag-cloud" aria-label="Common academic interests in major and minor responses"></div>
+        </article>
+      </section>
+
+      <section class="directory-section">
+        <div class="directory-heading">
+          <div>
+            <div class="eyebrow">Individual responses</div>
+            <h2>Student directory</h2>
+            <p>Grouped by discussion section. Select a student to see every answer.</p>
+          </div>
+          <div class="directory-controls">
+            <label class="search-field">
+              <span class="sr-only">Search students</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.4-4.4m2.4-5.1a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z"/></svg>
+              <input id="studentSearch" type="search" placeholder="Search name, email, hometown…">
+            </label>
+            <label class="select-field"><span class="sr-only">Filter by section</span><select id="sectionFilter"><option value="all">All sections</option></select></label>
+          </div>
+        </div>
+        <div id="directoryEmpty" class="empty-state">
+          <span aria-hidden="true">↗</span><h3>Responses will appear here.</h3><p>Share the questionnaire link with students to begin.</p>
+        </div>
+        <div id="studentDirectory" class="student-directory" hidden></div>
+      </section>
+    </section>
+  </main>
+
+  <dialog id="studentDialog" class="student-dialog">
+    <button class="dialog-close" type="button" aria-label="Close student details">×</button>
+    <div id="studentDialogContent"></div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <script src="firebase-config.js"></script>
+  <script type="module" src="app.js?v=20260818-4"></script>
+</body>
+</html>
